@@ -53,7 +53,7 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   # device 認証 メール本文からアプリへリンクする際のURLに使われます。
-  config.action_mailer.default_url_options = { host: 'pyuta.com', port: 3000 }
+  config.action_mailer.default_url_options = { host: 'nisa.jpn.com', port: 3000 }
 
   #Error キャッチ有効化※メールが送信できない時の調査用
   config.action_mailer.raise_delivery_errors = true
