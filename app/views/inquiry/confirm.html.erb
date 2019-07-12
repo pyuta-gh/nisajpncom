@@ -1,0 +1,40 @@
+<h3>お問い合わせ送信確認</h3>
+
+<%= form_for @inquiry, :url => inquiry_thanks_path do |f| %>
+    <div class="">
+      <table class="table  table-bordered table-condensed" style="table-layout:fixed;width:580px;">
+        <tr>
+          <th width="150">名前</th>
+          <td width="530">
+            <%= f.hidden_field :name %>
+            <%= @inquiry.name %>
+          </td>
+        </tr>
+        <tr>
+          <th>メールアドレス</th>
+          <td>
+            <%= f.hidden_field :email %>
+            <%= @inquiry.email %>
+          </td>
+        </tr>
+        <tr>
+          <th>お問い合わせ内容</th>
+          <td>
+            <%= f.hidden_field :message %>
+            <TEXTAREA  rows="20" style="width: 500px;border-style: none; color:#000000; background-color:#ffffff;resize: none;" disabled="disabled"><%=@inquiry.message %></TEXTAREA>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+    <span class="text-info " >
+      <dl id="info_list">
+        <dt><i class="glyphicon glyphicon-warning-sign"></i></dt><dd>メールアドレスに誤りがない事をご確認ください</dd>
+      </dl>
+    </span>
+    <%= f.submit '送信', :class => 'btn btn-default' %>
+    <input type="button" class ='btn btn-default' value="戻る" onClick="history.back()">
+<% end %>
+<br>
+<br>
+<br>

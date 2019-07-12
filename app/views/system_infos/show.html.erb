@@ -1,0 +1,19 @@
+<%- model_class = SystemInfo -%>
+
+  <h3>メンテナンス情報</h3>
+
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:send_date) %>:</strong></dt>
+  <dd><%= @system_info.send_date %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:subject) %>:</strong></dt>
+  <dd><%= @system_info.subject %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:body) %>:</strong></dt>
+  <dd><%= @system_info.body %></dd>
+</dl>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              system_infos_path, :class => 'btn btn-default'  %>
+<br>
+<br>
+<br>

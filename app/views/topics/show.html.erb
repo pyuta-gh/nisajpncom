@@ -1,0 +1,27 @@
+<%- model_class = Topic -%>
+
+  <h3>ニュース</h3>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:title) %>:</strong></dt>
+  <dd><%= @topic.title %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:link) %>:</strong></dt>
+  <dd><%= @topic.link %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:category) %>:</strong></dt>
+  <dd><%= @topic.category %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:pubDate) %>:</strong></dt>
+  <dd><%= @topic.pubDate %></dd>
+</dl>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              topics_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_topic_path(@topic), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              topic_path(@topic),
+              :method => 'delete',
+            :data => { :confirm => "削除してよろしいですか？" ,cancel: "キャンセル",commit: "削除"}, title: "削除確認",
+            :class => 'btn btn-default' %>
+<br>
+<br>
+<br>

@@ -1,0 +1,24 @@
+<% if @system_info.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h2><%= @system_info.errors.count %>件のエラーがあります。</h2>
+
+      <ul>
+        <% @system_info.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+<%= simple_form_for @system_info, :html => { :class => 'form-horizontal' 'text-left'} do |f| %>
+    <div class="input-group date-range-picker-width" >
+      <%= f.input :send_date  , as: :date_picker , :input_html => {:maxlength =>10,:style=> 'width: 130px'}%>
+    </div>
+  <%= f.input :subject ,:input_html => {:maxlength =>50,:style=> 'width: 430px'}%>
+  <%= f.input :body ,:input_html => {:maxlength =>500,:style=> 'width: 430px;min-height: 220px;'}%>
+  <%= f.button :submit, :class => 'btn-default' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                system_infos_path, :class => 'btn btn-default' %>
+<% end %>
+<br>
+<br>
+<br>

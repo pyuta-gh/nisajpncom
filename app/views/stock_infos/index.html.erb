@@ -1,0 +1,131 @@
+<%- model_class = StockInfo -%>
+
+<%
+   list_act  =""
+   list_act2  =""
+   search_act =""
+   search_act2 =""
+   if @stock_infos.records.count >0 and @btn_search ==true then
+     list_act ="active"
+     list_act2 =" in active"
+   else
+     search_act ="active"
+     search_act2 =" in active"
+   end
+%>
+
+<h3><%=t '.title', :default => "銘柄検索" %></h3>
+<div id="navi">
+    <ul class="nav nav-tabs nav-justified">
+      <li class="<%=list_act%>"><a href="#tab_list" data-toggle="tab"><i class="glyphicon glyphicon-list-alt"></i>リスト表示</a></li>
+      <li class="<%=search_act%>"><a href="#tab_search" data-toggle="tab"><i class="glyphicon glyphicon-search"></i>検索</a></li>
+    </ul>
+</div>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade<%=list_act2%>" id="tab_list">
+    <br>
+    <% if @stock_infos.records.count >0 and @btn_search ==true then%>
+        <table class="table table-striped table-bordered table-condensed" style="table-layout:fixed;width:580px;">
+          <thead>
+          <tr>
+            <th class="text-center" style="width:150px;">
+              <%= model_class.human_attribute_name(:market_code) %><br>
+              <%= model_class.human_attribute_name(:stock_code) %><br>
+              <%= model_class.human_attribute_name(:stock_name) %>
+            </th>
+            <th class="text-center" style="width:110px;">
+              <%= model_class.human_attribute_name(:end_rate_mny) %><br>
+              <%= model_class.human_attribute_name(:start_rate_mny) %><br>
+              <%= model_class.human_attribute_name(:min_rate_mny) %><br>
+              <%= model_class.human_attribute_name(:max_rate_mny) %>
+            </th>
+            <th class="text-center" style="width:170px;">
+              <%= model_class.human_attribute_name(:buy_sell_quantity) %><br>
+              <%= model_class.human_attribute_name(:trading_sum_mny) %>
+            </th>
+            <th class="text-center" style="width:140px;"><%=t '.actions', :default => "" %></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @stock_infos.each do |stock_info| %>
+              <tr>
+                <td class="text-left">
+                  <%= stock_info.market_name %><br>
+                  <%= stock_info.stock_code %><br>
+                  <%= stock_info.stock_name %>
+                </td>
+                <td class="text-right">
+                  <%= format_num(stock_info.end_rate_mny,Settings.format_opt.currency) %><br>
+                  <%= format_num(stock_info.start_rate_mny,Settings.format_opt.currency) %><br>
+                  <%= format_num(stock_info.min_rate_mny,Settings.format_opt.currency) %><br>
+                  <%= format_num(stock_info.max_rate_mny,Settings.format_opt.currency) %>
+                </td>
+                <td class="text-right">
+                  <%= format_num(stock_info.buy_sell_quantity,Settings.format_opt.currency) %><br>
+                  <%= format_num(stock_info.trading_sum_mny,Settings.format_opt.currency) %>
+                </td>
+                <td class="text-center">
+                  <%= link_to "保有銘柄登録", "/stock_infos/hold/"  + stock_info.stock_code  ,
+                              :class => 'btn btn-default btn-block'%>
+
+                  <%= link_to "配当金登録", "/dividends/new/stock_code/"  + stock_info.stock_code.to_s,
+                              :class => 'btn btn-default btn-block'%>
+
+                  <%= link_to "ウォッチ登録", "/stock_monitors/new/"  + stock_info.stock_code  ,
+                              :class => 'btn btn-default btn-block'%>
+                </td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+    <span class="text-info " >
+          <dl id="info_list">
+            <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>値は参考金額（毎営業日18:00に市場値反映）</dd>
+          </dl>
+        </span>
+
+        <%= paginate @stock_infos %><br>
+    <% end %>
+
+  </div>
+  <div class="tab-pane fade<%=search_act2%>" id="tab_search">
+    <fieldset>
+      <legend>検索条件</legend>
+
+      <%= search_form_for(@q, method: :get) do |f| %>
+          <div class="">
+            <div class="form-group form-inline">
+              <div class="">
+                銘柄コード
+                <%= f.text_field :stock_code_eq, class: "form-control", placeholder: "完全一致",:style=> 'width: 110px',:maxlength =>4%>
+                <div id="mobile-menu" class="visible-sm visible-xs" style="white-space:nowrap;">
+                  <br>
+                </div>
+
+
+                銘柄名
+                <%= f.text_field :stock_name_cont, class: "form-control", placeholder: "部分一致" ,:style=> 'width: 235px', :maxlength =>20%>
+                <div id="mobile-menu" class="visible-sm visible-xs" style="white-space:nowrap;">
+                  <br>
+                </div>
+
+                <%= f.submit '検索', class: "btn btn-default" %>
+                <%= link_to 'クリア', "/stock_infos", class: "btn btn-default" %>
+              </div>
+            </div>
+          </div>
+      <% end %>
+    </fieldset>
+  </div>
+</div>
+<% if @stock_infos.records.count ==0 and @btn_search ==true then%>
+    <span class="text-info " >
+          <dl id="info_list">
+            <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>該当する銘柄はありません</dd>
+          </dl>
+        </span>
+
+<%end%>
+<br>
+<br>
+<br>

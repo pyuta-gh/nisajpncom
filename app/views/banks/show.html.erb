@@ -1,0 +1,32 @@
+<%- model_class = Bank -%>
+  <h3>NISA口座登録</h3>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:opt) %>:</strong></dt>
+  <dd><%= @bank_opt_name %>
+  </dd>
+  <%if @bank.opt ==1 or @bank.opt ==2 %>
+      <dt><strong><%= model_class.human_attribute_name(:year) %>:</strong></dt>
+      <dd><%= @bank.year %></dd>
+  <%end%>
+  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
+  <dd><%= @bank.name %></dd>
+</dl>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              banks_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_bank_path(@bank), :class => 'btn btn-default' %>
+<%if @stockHold_exist == false%>
+    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                bank_path(@bank),
+                :method => 'delete',
+                :data => { :confirm => "削除してよろしいですか？" ,cancel: "キャンセル",commit: "削除"}, title: "削除確認",
+                :class => 'btn btn-default' %>
+<%else%>
+    <br><br>
+    <p class="text-info">保有銘柄または譲渡銘柄に登録済みのため、削除不可</p>
+<%end%>
+<br>
+<br>
+<br>

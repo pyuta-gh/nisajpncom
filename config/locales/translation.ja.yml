@@ -1,0 +1,98 @@
+ja:
+  activerecord:
+    models:
+      bank: NISA口座
+      stock_hold: 保有銘柄
+    attributes:
+      bank:
+        user_id: ユーザーID
+        year: 年度
+        name: 口座名
+        opt: 口座種類
+        created_at: 登録日
+        updated_at: 更新日
+      stock_hold:
+        user_id: ユーザーID
+        bank_id: 口座
+        stock_type: 株式分類
+        stock_code: 銘柄コード
+        stock_name: 銘柄名
+        buy_date: 取得日
+        buy_rate_mny: 取得単価
+        buy_quantity: 取得数量
+        sell_date: 譲渡日
+        sell_rate_mny: 譲渡単価
+        sell_quantity: 譲渡数量
+        expenses_mny: 諸費用
+        profit_loss_mny: 譲渡損益
+        created_at: 登録日
+        updated_at: 更新日
+        bank_id: 口座
+      stock_info:
+        market_code: 市場コード
+        stock_code: 銘柄コード
+        stock_name: 銘柄名
+        end_rate_mny: 現在値
+        min_rate_mny: 安値
+        max_rate_mny: 高値
+        start_rate_mny: 始値
+        buy_sell_quantity: 出来高
+        trading_sum_mny: 売買代金
+        created_at: 登録日
+        updated_at: 更新日
+      stock_monitor:
+        user_id: ユーザーID
+        stock_code: 銘柄コード
+        monitor_type: アラート条件
+        value: アラート金額
+      topic:
+        title: 件名
+        link: URL
+        category: カテゴリ
+        pubDate: 公開日
+        created_at: 配信日時
+        updated_at: 更新日
+      message_read:
+        message_id: メッセージID
+        user_id: ユーザーID
+        read_flg: 既読フラグ
+        delete_flg: 削除フラグ
+        created_at: 登録日
+        updated_at: 更新日
+      message:
+        user_id: ユーザーID
+        send_date: 配信日
+        subject: 件名
+        body: 本文
+        created_at: 配信日時
+        updated_at: 更新日
+      system_info:
+        send_date: 配信日
+        subject: 件名
+        body: 本文
+        created_at: 配信日時
+        updated_at: 更新日
+      dividend:
+        pay_date: 入金日
+        stock_code: 銘柄コード
+        stock_name: 銘柄名
+        pay_rate_mny: 単価
+        pay_quantity: 数量
+        pay_profit_mny: 配当金・分配金
+        user_id: ユーザーID
+        stock_type: 株式分類
+        bank_id: 口座
+      affiliate:
+        company: 広告会社
+        a_id: 広告ID
+        a_tag: 広告タグ
+        delete_flg: 削除フラグ
+  views:
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "..."
+
+

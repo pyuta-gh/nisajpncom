@@ -1,0 +1,51 @@
+<%- model_class = Dividend -%>
+
+  <h3><%=t '.title', :default => "配当金" %></h3>
+
+<dl class="dl-horizontal">
+  <dt><strong>口座:</strong></dt>
+  <dd><%= @dividend_2.bank_name %></dd>
+
+
+  <dt><strong><%= model_class.human_attribute_name(:pay_date) %>:</strong></dt>
+  <dd><%= @dividend.pay_date %></dd>
+  <dt><strong>口座種類:</strong>
+  <dd>
+    <%=@dividend_2.bank_type_name%><br>
+    <% if @dividend_2.bank_opt == 1 or @dividend_2.bank_opt == 2 %>
+        （<%=@dividend_2.bank_year%> 年度分）
+    <% end %>
+  </dd>
+
+  <dt><strong><%= model_class.human_attribute_name(:stock_type) %>:</strong></dt>
+  <dd><%= @dividend_2.stock_type_name %></dd>
+  <% #国内株式の場合、銘柄コード表示
+     if @dividend_2.stock_type == Settings.stock_type.jpn_stock
+  %>
+      <dt><strong><%= model_class.human_attribute_name(:stock_code) %>:</strong></dt>
+      <dd><%= @dividend.stock_code %></dd>
+  <%
+     end
+  %>
+  <dt><strong><%= model_class.human_attribute_name(:stock_name) %>:</strong></dt>
+  <dd><%= @dividend.stock_name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:pay_rate_mny) %>:</strong></dt>
+  <dd><%= format_decimal(@dividend.pay_rate_mny,Settings.format_opt.currency,2) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:pay_quantity) %>:</strong></dt>
+  <dd><%= format_num(@dividend.pay_quantity,Settings.format_opt.quantity) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:pay_profit_mny) %>:</strong></dt>
+  <dd><%= format_num(@dividend.pay_profit_mny.to_i,Settings.format_opt.currency) %></dd>
+</dl>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              dividends_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_dividend_path(@dividend), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              dividend_path(@dividend),
+              :method => 'delete',
+            :data => { :confirm => "削除してよろしいですか？" ,cancel: "キャンセル",commit: "削除"}, title: "削除確認",
+              :class => 'btn btn-default' %>
+<br>
+<br>
+<br>

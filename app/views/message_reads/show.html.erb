@@ -1,0 +1,24 @@
+<%- model_class = MessageRead -%>
+
+  <h3>メッセージ 既読・削除管理</h3>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:message_id) %>:</strong></dt>
+  <dd><%= @message_read.message_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:user_id) %>:</strong></dt>
+  <dd><%= @message_read.user_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:read_flg) %>:</strong></dt>
+  <dd><%= @message_read.read_flg %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:delete_flg) %>:</strong></dt>
+  <dd><%= @message_read.delete_flg %></dd>
+</dl>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              message_reads_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_message_read_path(@message_read), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              message_read_path(@message_read),
+              :method => 'delete',
+            :data => { :confirm => "削除してよろしいですか？" ,cancel: "キャンセル",commit: "削除"}, title: "削除確認",
+            :class => 'btn btn-default' %>

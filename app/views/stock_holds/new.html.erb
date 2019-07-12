@@ -1,0 +1,11 @@
+<%- model_class = StockHold -%>
+
+  <%
+     #登録、更新時の戻り先は、一覧画面
+     if (@p_list.to_s.include?(Settings.stock_holds_mode.profitloss))%>
+      <h3>譲渡損益 登録</h3>
+  <% else%>
+      <h3>保有銘柄 登録</h3>
+  <%end %>
+
+<%= render :partial => 'form' %>

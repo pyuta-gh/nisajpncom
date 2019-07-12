@@ -1,0 +1,38 @@
+<% if @inquiry.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h2><%= @inquiry.errors.count %>件のエラーがあります。</h2>
+
+      <ul>
+        <% @inquiry.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+<h3>お問い合わせ入力</h3>
+
+<span class="text-info " >
+  <dl id="info_list">
+    <dt><i class="glyphicon glyphicon-warning-sign"></i></dt><dd>ご意見、ご感想をお寄せください</dd>
+    <dt><i class="glyphicon glyphicon-warning-sign"></i></dt><dd>本サービスは管理者の技術力向上のため、開発した無料サービスです</dd>
+    <dt><i class="glyphicon glyphicon-warning-sign"></i></dt><dd>個別サポートは、原則、対応しかねる事、御了承ください</dd>
+  </dl>
+</span>
+
+<%= simple_form_for @inquiry, :url => inquiry_confirm_path, :html => { :class => 'form-horizontal' 'text-left'} do |f| %>
+    <%= f.label :name ,"* 名前"%>
+    <%= f.input :name,:input_html => {:style=> 'width: 550px', :maxlength =>50}, label: false%>
+
+    <%= f.label :email ,"* メールアドレス"%>
+    <%= f.input :email ,:input_html => {:style=> 'width: 550px' , :maxlength =>50}, label: false%>
+
+    <%= f.label :message ,"* お問い合わせ内容（1000文字）"%>
+    <%= f.input :message , as: :text,:input_html => {:style=> 'width: 500px ;height: 550px ' ,:rows => 10, :maxlength =>1000}, label: false%>
+    <span class="text-info " >
+      <dl id="info_list">
+        <dt><i class="glyphicon glyphicon-warning-sign"></i></dt><dd>メールアドレスに誤りがない事をご確認ください</dd>
+      </dl>
+    </span>
+    <%= f.button :submit, '確認', :class => 'btn-default' %>
+<% end %>
+<br><br>

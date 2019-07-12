@@ -1,0 +1,121 @@
+<% if @stock_hold.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h2><%= @stock_hold.errors.count %>件のエラーがあります。</h2>
+
+      <ul>
+        <% @stock_hold.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+<%= simple_form_for @stock_hold, :html => { :class => 'form-horizontal' 'text-left'} do |f| %>
+    <%if Bank.where('user_id = ?',current_user.id).records.count==1%>
+        <%= f.input :bank_id, collection: Bank.where('user_id = ?',current_user.id).order("year desc,opt asc ,name asc").all.map { |v| [v.year_and_name, v.id] },:input_html => {:style=> 'width: 490px'},include_blank: false%>
+    <%else%>
+        <%= f.input :bank_id, collection: Bank.where('user_id = ?',current_user.id).order("year desc,opt asc ,name asc").all.map { |v| [v.year_and_name, v.id] },:input_html => {:style=> 'width: 490px'}%>
+    <%end%>
+
+
+    <%= f.input :stock_type, collection: SystemCode.where('opt = ? ','003').order("sort").all.map { |v| [v.name, v.key] },:input_html => {:style=> 'width: 220px'},include_blank: false%>
+<div id ="stock_input_code"   >
+  <%= f.input :stock_code , :input_html => {:maxlength =>4,:style=> 'width: 150px',id: "set_stock_name"}%>
+  <p style="font-weight:bold">
+    <span id ="stock_input_code_name" class="text-info"></span>
+  </p>
+  銘柄コードが分からない場合、<a href="/stock_infos"><i class="glyphicon glyphicon-search"></i>銘柄検索</a>をご利用ください<br><br>
+</div>
+
+<div id ="stock_input_name">
+    <%= f.input :stock_name , :input_html => {:maxlength =>50,:style=> 'width: 420px'}%>
+</div>
+    <div class="input-group date-range-picker-width" >
+  <%= f.input :buy_date , as: :date_picker , :input_html => {:maxlength =>10,:style=> 'width: 130px'}%>
+    </div>
+
+
+    <%= f.label :buy_rate_mny %>（円）<br>
+    <div style="display:inline-flex">
+      <% if (@p_list.to_s.include?(Settings.stock_holds_mode.profitloss) and !@p_list.to_s.include?(Settings.stock_holds_mode.profitloss_new))||(@p_list.to_s.include?("hold_edit"))||(@p_list.to_s.include?("hold_sell")) %>
+          <%= f.input :buy_rate_mny ,as: :string,label: false, :input_html => {:maxlength =>7,:style=> 'width: 110px',:readonly=>true}%>
+      <%else%>
+          <%= f.input :buy_rate_mny ,as: :string,label: false, :input_html => {:maxlength =>7,:style=> 'width: 110px'}%>
+      <%end%>
+    </div><br>
+
+
+    <%= f.label :buy_quantity %> （株・口）<br>
+    <div style="display:inline-flex">
+  <% if (@p_list.to_s.include?(Settings.stock_holds_mode.profitloss) and !@p_list.to_s.include?(Settings.stock_holds_mode.profitloss_new))||(@p_list.to_s.include?("hold_edit"))||(@p_list.to_s.include?("hold_sell")) %>
+        <%= f.input :buy_quantity ,as: :string,label: false, :input_html => {:maxlength =>8,:style=> 'width: 110px',:readonly=>true}%><br>
+  <%else%>
+        <%= f.input :buy_quantity ,as: :string,label: false, :input_html => {:maxlength =>8,:style=> 'width: 110px'}%><br>
+  <%end%>
+    </div>
+    <div class="input-group date-range-picker-width" >
+        <%= f.input :sell_date  , as: :date_picker , :input_html => {:maxlength =>10,:style=> 'width: 130px'}%>
+    </div>
+
+    <%= f.label :sell_rate_mny %>（円）<br>
+    <div style="display:inline-flex">
+      <% if (@p_list.to_s.include?(Settings.stock_holds_mode.profitloss) and !@p_list.to_s.include?(Settings.stock_holds_mode.profitloss_new)) %>
+          <%= f.input :sell_rate_mny ,as: :string,label: false, :input_html => {:maxlength =>7,:style=> 'width: 110px',:readonly=>true}%>
+      <%else%>
+          <%= f.input :sell_rate_mny ,as: :string,label: false, :input_html => {:maxlength =>7,:style=> 'width: 110px'}%>
+      <%end%>
+    </div><br>
+
+
+    <%= f.label :sell_quantity %> （株・口）<br>
+    <div style="display:inline-flex">
+    <% if @p_list.to_s.include?(Settings.stock_holds_mode.profitloss) and !@p_list.to_s.include?(Settings.stock_holds_mode.profitloss_new) %>
+        <%= f.input :sell_quantity ,as: :string,label: false, :input_html => {:maxlength =>8,:style=> 'width: 110px',:readonly=>true}%>
+
+    <%else%>
+        <%= f.input :sell_quantity ,as: :string,label: false, :input_html => {:maxlength =>8,:style=> 'width: 110px'}%>
+    <%end%>
+    </div><br>
+    <%= f.label :expenses_mny %>（円）<br>
+    <div style="display:inline-flex">
+      <%= f.input :expenses_mny  ,as: :string,label: false, :input_html => {:maxlength =>6,:style=> 'width: 110px'}%>
+    </div>
+
+    <input type="hidden" value =<%=@p_list.to_s %> name="p_list" >
+<br>
+  <%= f.button :submit, :class => 'btn-default' %>
+    <% #一覧からの遷移は、前画面の一覧に元る
+       if (request.referrer.to_s.include?(stock_holds_path+"/list/")) %>
+            <% backurl  =request.referrer.to_s %>
+        <%else%>
+            <% #譲渡損益の場合、譲渡損益一覧に戻る
+               if @p_list.to_s.include?(Settings.stock_holds_mode.profitloss) %>
+                <% backurl  =stock_holds_path+"/list/profitloss_year" %>
+            <%else%>
+                <% #保有銘柄一覧に戻る
+                   backurl  =stock_holds_path+"/list/year" %>
+            <%end%>
+        <% end %>
+
+    <% #譲渡損益の場合、譲渡損益一覧に戻る
+       if !(@p_list.to_s.include?(Settings.stock_holds_mode.hold_new) or @p_list.to_s.include?(Settings.stock_holds_mode.profitloss_new)) %>
+        <% if !@stock_hold.sell_quantity.nil?%>
+            <%= link_to t('.destroy', :default => t("譲渡取消")),
+                        stock_hold_path(@stock_hold)+"/"+ Settings.stock_holds_mode.profitloss_cancel,
+                        :method => :patch,
+                        :data => { :confirm => "譲渡を取消してよろしいですか？ <br>保有銘柄になります。" ,cancel: "キャンセル",commit: "譲渡取消"}, title: "譲渡取消の確認",
+                        :class => 'btn  btn-default' %>
+        <% end %>
+    <%end%>
+
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                (backurl), :class => 'btn btn-default'  %>
+<% end %>
+
+<br>
+<% if (@p_list.to_s.include?(Settings.stock_holds_mode.profitloss) and !@p_list.to_s.include?(Settings.stock_holds_mode.profitloss_new))||(@p_list.to_s.include?("hold_edit"))||(@p_list.to_s.include?("hold_sell")) %>
+    <span class="text-info">※単価、数量を変更する場合、削除の上、新規登録してください</span>
+<%end%>
+<br><br>
+<br>
+<br>
+<br>

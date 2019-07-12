@@ -1,0 +1,37 @@
+<% if @stock_monitor.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h2><%= @stock_monitor.errors.count %>件のエラーがあります。</h2>
+
+      <ul>
+        <% @stock_monitor.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+<%= simple_form_for @stock_monitor, :html => { :class => 'form-horizontal'  'text-left'} do |f| %>
+
+    <%= f.input :stock_code, :input_html => {:maxlength =>4,:style=> 'width: 150px',id: "set_stock_name"} %>
+    <p style="font-weight:bold"><span id ="stock_input_code_name" class="text-info"></span></p>
+       銘柄コードが分からない場合、<a href="/stock_infos"><i class="glyphicon glyphicon-search"></i>銘柄検索</a>をご利用ください<br>
+    <br>
+    <%= f.input :monitor_type, collection: SystemCode.where('opt = ?','004').order("sort").all.map { |v| [v.name, v.key] },:input_html => {:style=> 'width: 80px'}%><br>
+    <%= f.label :value %>（円）<br>
+    <div style="display:inline-flex">
+      <%= f.input :value ,as: :string, label: false, :input_html => {:maxlength =>7,:style=> 'width: 100px'}%>
+    </div>
+    <br>
+    <span class="text-info " >
+      <dl id="info_list">
+        <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>日本株式の上場銘柄のみ対象</dd>
+        <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>登録銘柄の終値、高値、安値の内、いずれか１つの値幅が、アラート金額の条件を満たした場合、メール通知</dd>
+      </dl>
+    </span>
+
+  <%= f.button :submit, :class => 'btn-default' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                stock_monitors_path, :class => 'btn btn-default' %>
+<% end %>
+<br>
+<br>
+<br>

@@ -1,0 +1,60 @@
+<%- model_class = Message -%>
+
+  <h3>お知らせ一覧</h3>
+
+<% if @messages.records.count >0 then%>
+    <table class="table table-striped table-bordered table-condensed" style="table-layout:fixed;width:590px;">
+      <thead>
+      <tr>
+        <th class="text-center" style="width:130px;"><%= model_class.human_attribute_name(:created_at) %></th>
+        <th class="text-center" style="width:140px;">宛先</th>
+        <th class="text-center" style="width:220px;"><%= model_class.human_attribute_name(:subject) %></th>
+        <th class="text-center" style="width:80px;"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @messages.each do |message| %>
+          <tr>
+            <td>
+              <%=l message.created_at %>
+              <br>
+              <% if message.read_flg%>
+              【既読】
+              <% else %>
+              【未読】
+              <% end %>
+            </td>
+            <td>
+              <% if message.user_id.to_s =="" %>
+                  利用者全員
+              <% else %>
+                  個別連絡
+              <% end %>
+
+            </td>
+            <td>
+              <%= link_to message.subject, message_path(message)  %>
+            </td>
+            <td>
+              <%= link_to t('.show', :default => t("helpers.links.show")),
+                          message_path(message), :class => 'btn btn-default btn-block' %>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <%= paginate @messages %><br>
+<% else%>
+    <p class="text-info">
+      お知らせはありません<br><br>
+    </p>
+<% end %>
+
+
+<!--
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_message_path,
+            :class => 'btn btn-default' %>-->
+<br>
+<br>
+<br>

@@ -1,0 +1,45 @@
+<%- model_class = StockHold -%>
+    <% if @p_list.to_s.include?(Settings.stock_holds_mode.profitloss)  %>
+        <% p_list= "/" + Settings.stock_holds_mode.profitloss_new %>
+    <%else%>
+        <% p_list= "/" + Settings.stock_holds_mode.hold_new %>
+    <%end%>
+  <h3>
+      <%=t '.title', :default => @title %>
+  </h3>
+<% if @stock_holds.records.count >0 then%>
+    <div id="mobile-menu" class="visible-sm visible-xs" style="white-space:nowrap;">
+      <%= link_to t('.new', :default => "登録"),
+                  new_stock_hold_path + p_list,
+                  :class => 'btn btn-default'%>
+    </div>
+    <br>
+<%end%>
+<% case @p_list %>
+<% when Settings.stock_holds_list.year,
+        Settings.stock_holds_list.stock,
+        Settings.stock_holds_list.bank,
+        Settings.stock_holds_list.profit_current,
+        Settings.stock_holds_list.loss_current,
+        Settings.stock_holds_list.profit_loss_year,
+        Settings.stock_holds_list.profit_loss_stock,
+        Settings.stock_holds_list.profit_loss_bank,
+        Settings.stock_holds_list.profit_loss_profit,
+        Settings.stock_holds_list.profit_loss_loss
+   then %>
+    <%= render 'stock_holds/index_record',model_class: model_class  %>
+<%  end %>
+
+<%if @p_list == Settings.stock_holds_list.profit_current %>
+    <span class="text-info">※現在値の利益は国内株式のみ表示</span><br><br>
+<%end %>
+<%if @p_list == Settings.stock_holds_list.loss_current %>
+    <span class="text-info">※現在値の損失は国内株式のみ表示</span><br><br>
+<%end %>
+
+
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_stock_hold_path + p_list,
+            :class => 'btn btn-default'%>
+<br><br><br>

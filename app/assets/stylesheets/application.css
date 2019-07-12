@@ -1,0 +1,244 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require "bootstrap_and_overrides"
+ *= require_self
+ *= require_moment
+ *= require bootstrap-datetimepicker
+ *= require toastr.min
+ *= require font-awesome
+ */
+@media (min-width: 768px) {
+    ul.nav li.dropdown:hover > ul.dropdown-menu {
+        display: block;
+    }
+}
+
+
+/* inputフォーカス時の色 */
+.focus {
+    background: #FFFF66;
+}
+
+.date-range-picker-width{
+    width: 8em;
+}
+
+/* テーブル固定幅、文字列折り返し */
+.table {
+    width: 100%;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+/* dtとddを横並びにして複数行でもズレない*/
+dt {
+    clear:left;
+    float: left;
+    width: 170px;
+    display:block;
+}
+dd {
+    margin-left:170px;
+}
+
+/* フッターを下部へ固定
+-------------------------------------------------- */
+body , html {
+    height: 100%;
+}
+
+#container {
+    width: 100%;
+    position: relative;
+    height: auto !important;
+    height: 100%;
+    min-height: 100%;
+}
+
+#contents {
+    padding-bottom: 100px;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 65px;
+    text-align: center;
+}
+/*html,*/
+/*body {*/
+    /*height: 100%;*/
+    /*/!* html と body 要素はパディングやマージンを持てません。*!/*/
+/*}*/
+
+/*/!* フッターを下部へ押しやるための、コンテンツのラッパー *!/*/
+/*#wrap {*/
+    /*min-height: 100%;*/
+    /*height: auto;*/
+    /*/!* フッターの高さ分だけ、ネガティブインデントを指定 *!/*/
+    /*margin: 0 auto -60px;*/
+    /*/!* フッターの高さ分だけ、パディングを指定 *!/*/
+    /*padding: 0 0 60px;*/
+/*}*/
+
+/*/!* ここでフッターの高さを指定 *!/*/
+/*#footer {*/
+    /*height: 145px;*/
+    /*background-color: #f5f5f5;*/
+/*}*/
+
+
+/* resTables */
+table.restables-clone { display: none; }
+table.restables-clone td { width: 50%; }
+table.restables-clone td:first-child {
+    font-weight: bold;
+}
+table.restables-clone tr:first-child td {
+    font-weight: bold;
+    width: 25%;
+    padding: 6px;
+    text-align: left;
+    vertical-align: top;
+    color: #333;
+    background-color: #eee;
+    border: 1px solid #b9b9b9;
+}
+
+@media (max-width: 1024px) {
+    .container table.restables-origin { display: none; }
+    .container table.restables-clone { display: table; }
+}
+
+
+/* h3 */
+h1{
+    border-top: 3px double #53727d;border-bottom: 3px double #53727d;padding: 7px;font-size: 24px;
+}
+
+
+/* h3 */
+h3{
+    border-top: 3px double #53727d;border-bottom: 3px double #53727d;padding: 7px;
+}
+
+/* 利用規約など用 スクロールバー付きボックス*/
+div.scrole_message {
+    padding:20px;
+    height:500px;
+    border:1px solid #ccc;
+    overflow-y:scroll;
+}
+
+/* dl dt dd のインフォリスト */
+dl#info_list dl,dt,dd {
+
+}
+
+dl#info_list dl {
+
+}
+
+dl#info_list dt,dd {
+
+}
+
+dl#info_list dt {
+    float: left;
+    clear: both;
+    width: 5%;
+    padding: 5px 0px;
+}
+
+dl#info_list dd {
+    width: 80%;
+    margin-left:5%;
+    border-bottom: dotted 1px #e2e2e2;
+    padding: 5px 0px;
+}
+
+/* bootstrap default ボタン */
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}
+
+.btn-default {
+    background: #0099cc;
+    color: #ffffff;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default {
+    background: #33a6cc;
+}
+
+.btn-default:active, .btn-default.active {
+    background: #007299;
+    box-shadow: none;
+}
+
+
+
+
+.btn-danger {
+    background: #0099cc;
+    color: #ffffff;
+    border-color: #0099cc;
+}
+
+.btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .dropdown-toggle.btn-danger {
+    background: #33a6cc;
+    border-color: #33a6cc;
+}
+
+.btn-danger:active {
+    background: #007299;
+    border-color: #007299;
+    box-shadow: none;
+}
+
+/*ページング*/
+.pagination .active a { background-color: #0099cc ;border-color: #0099cc}
+.pagination li:hover:not(.active) a {
+    background-color: #0099cc ;border-color: #0099cc
+}
+
+.pagination .disabled a { background-color: #0099cc ;border-color: #0099cc}
+.pagination li:hover:not(.disabled) a {
+    background-color: #0099cc ;border-color: #0099cc
+}
+
+
+
+
+
+/*bootstrap 余白調整*/
+.container {
+    padding-right:10px;
+    padding-left: 10px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/*検索条件フレーム*/
+fieldset {
+    margin-bottom: 20px;
+    padding: 0 20px 15px;
+    border: 1px #FCFCFC groove;
+}
+
+legend {
+    border: none;
+    width: auto;
+
+}

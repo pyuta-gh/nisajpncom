@@ -1,0 +1,63 @@
+<%- model_class = StockMonitor -%>
+  <h3><%=t '.title', :default => "ウォッチリスト" %></h3>
+
+<% if @stock_monitors.records.count >0 then%>
+    <table class="table table-striped table-bordered table-condensed" style="table-layout:fixed;width:590px;">
+      <thead>
+      <tr>
+        <th class="text-center" style="width:200px;"><%= model_class.human_attribute_name(:stock_code) %></th>
+        <th class="text-center" style="width:140px;"><%= model_class.human_attribute_name(:monitor_type) %></th>
+        <th class="text-center" style="width:140px;"><%= model_class.human_attribute_name(:value) %></th>
+        <th class="text-center" style="width:90px;"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @stock_monitors.each do |stock_monitor| %>
+          <tr>
+            <td>
+              <%= link_to stock_monitor.stock_code, "/stock_infos/search2/"+ stock_monitor.stock_code %><br>
+              <%= link_to stock_monitor.stock_code_name.to_s, "/stock_infos/search2/"+ stock_monitor.stock_code %>
+
+              <% if stock_monitor.stock_code_name.nil? %>
+                  <div align="left">
+                    <br><span class="text-info">※上場廃止銘柄は、ウオッチリスト対象外<br>&emsp; ウオッチリストから削除してください</span>
+                  </div>
+              <% end %>
+
+            </td>
+            <td class="text-center"><%= stock_monitor.monitor_name %></td>
+            <td class="text-right"><%= format_num(stock_monitor.value.to_i.to_s,Settings.format_opt.currency) %></td>
+            <td>
+              <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                          edit_stock_monitor_path(stock_monitor), :class => 'btn btn-default btn-block' %>
+              <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                          stock_monitor_path(stock_monitor),
+                          :method => :delete,
+                          :data => { :confirm => "削除してよろしいですか？" ,cancel: "キャンセル",commit: "削除"}, title: "削除確認",
+                          :class => 'btn  btn-default btn-block' %>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <%= paginate @stock_monitors %><br>
+    <span class="text-info " >
+      <dl id="info_list">
+        <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>日本株式の上場銘柄のみ対象</dd>
+      </dl>
+    </span>
+<% else%>
+    <span class="text-info " >
+      <dl id="info_list">
+        <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>ウオッチリストは未登録です</dd>
+        <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>日本株式の上場銘柄のみ対象</dd>
+      </dl>
+    </span>
+<% end %>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_stock_monitor_path,
+            :class => 'btn btn-default' %>
+<br>
+<br>
+<br>

@@ -1,0 +1,19 @@
+<%= bootstrap_devise_error_messages! %>
+<h3><%= t('.resend_unlock_instructions', :default => "Resend unlock instructions") %></h3>
+<div class="panel panel-default devise-bs">
+  <div class="panel-body">
+    <%= form_for(resource, :as => resource_name, :url => unlock_path(resource_name), :html => { :method => :post, html: { role: "form" } }) do |f| %>
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email, autofocus: true, class: "form-control" ,:maxlength =>"50"%>
+      </div>
+      <%= f.submit t('.resend_unlock_instructions', :default => "Resend unlock instructions"), class: "btn btn-default"%>
+    <% end %>
+  </div>
+</div>
+<%= render "devise/shared/links" %>
+<br>
+<br>
+<br>
+<br>
+<br>

@@ -1,0 +1,43 @@
+ja:
+  errors:
+    messages:
+      invalid_date: "は、日付のフォーマットが間違っています"
+      invalid_time: "は、時間のフォーマットが間違っています"
+      invalid_datetime: "は、日時のフォーマットが間違っています"
+      is_at: "は、%{restriction} を指定してください"
+      before: "は、%{restriction} より小さい日時を指定してください"
+      on_or_before: "は、%{restriction} 以前の日時を指定してください"
+      after: "は、%{restriction} より大きい日時を指定してください"
+      on_or_after: "は、%{restriction} 以降の日時を指定してください"
+  validates_timeliness:
+    error_value_formats:
+      date: '%Y-%m-%d'
+      time: '%H:%M:%S'
+      datetime: '%Y-%m-%d %H:%M:%S'
+
+#参考 URL
+#   http://ore-tech.blogspot.jp/2014/12/railsdatetimesvalidatetionvalidatestime.html
+## フォーマット確認
+#validates_datetime :occurred_at
+#
+## 18歳以上の確認
+#validates_date :date_of_birth, :before => lambda { 18.years.ago },
+#                               :before_message => "must be at least 18 years old"
+#
+## 開始日 < 終了日の確認
+#validates_datetime :finish_time, :after => :start_time # Method symbol
+#
+## 今日以降の日付かの確認
+## :todayは、config/initializers/validates_timeliness.rbで設定可能。
+#validates_date :booked_at, :on => :create, :on_or_after => :today
+#
+## AM 9:00~PM5:00の間の確認
+#validates_time :booked_at, :between => ['9:00am', '5:00pm']
+## 同じくAM 9:00~PM5:00の間の確認
+#validates_time :booked_at, :between => '9:00am'..'5:00pm'
+#
+## 確認した時間によってメッセージを切り替える。
+#validates_time :breakfast_time, :on_or_after => '6:00am',
+#                                :on_or_after_message => 'must be after opening time',
+#                                :before => :lunchtime,
+#                                :before_message => 'must be before lunch time'

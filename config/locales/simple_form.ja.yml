@@ -1,0 +1,53 @@
+ja:
+  simple_form:
+    "yes": 'Yes'
+    "no": 'No'
+    required:
+      text: 'required'
+      mark: '*'
+      # You can uncomment the line below if you need to overwrite the whole required html.
+      # When using html, text and mark won't be used.
+      # html: '<abbr title="required">*</abbr>'
+    error_notification:
+      default_message: "Please review the problems below:"
+
+
+    #labels:
+      #defaults:
+        #user_id: 'ユーザーIDを入力してください'
+    hints:
+      stock_hold:
+        bank_id: 'NISAの開設口座を入力してください'
+        #user_name: 'ユーザ名を入力してください'
+        #nisa_year: '取得株式のNISA対象年度を入力してください'
+        stock_name: '日本株式以外は銘柄名を直接入力'
+    placeholders:
+      stock_hold:
+        stock_name: '株式銘柄名、投資信託名'
+        stock_code: '銘柄コード4桁'
+      stock_monitor:
+        stock_code: '銘柄コード4桁'
+      dividend:
+        stock_code: '銘柄コード4桁'
+
+
+
+    # Examples
+    # labels:
+    #   defaults:
+    #     password: 'Password'
+    #   user:
+    #     new:
+    #       email: 'E-mail to sign in.'
+    #     edit:
+    #       email: 'E-mail.'
+    # hints:
+    #   defaults:
+    #     username: 'User name to sign in.'
+    #     password: 'No special characters, please.'
+    # include_blanks:
+    #   defaults:
+    #     age: 'Rather not say'
+    # prompts:
+    #   defaults:
+    #     age: 'Select your age'

@@ -1,0 +1,242 @@
+<%
+   list_act  =""
+   list_act2  =""
+   search_act =""
+   search_act2 =""
+   if @stock_holds.records.count >0 then
+     list_act ="active"
+     list_act2 =" in active"
+   else
+     search_act ="active"
+     search_act2 =" in active"
+   end
+%>
+
+<div id="navi">
+  <ul class="nav nav-tabs nav-justified">
+    <li class="<%=list_act%>"><a href="#tab_list" data-toggle="tab"><i class="glyphicon glyphicon-list-alt"></i>リスト表示</a></li>
+    <li class="<%=search_act%>"><a href="#tab_search" data-toggle="tab"><i class="glyphicon glyphicon-search"></i>検索</a></li>
+  </ul>
+</div>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade<%=list_act2%>" id="tab_list">
+<br>
+    <% if @stock_holds.records.count >0 then%>
+        <div id="mobile-menu" class="visible-sm visible-xs" style="white-space:nowrap;">
+          <%= paginate @stock_holds %>
+        </div>
+        <%if @p_list.to_s.include?(Settings.stock_holds_mode.profitloss)
+            table_width=830
+            th_actions_width=120
+          else
+            table_width=810
+            th_actions_width=190
+          end
+        %>
+        <table class="table table-striped table-bordered table-condensed" style="table-layout:auto;">
+          <thead>
+          <tr>
+            <th class="text-center" width="180px">
+              <%= model_class.human_attribute_name(:bank_id) %><br>
+              口座種類
+            </th>
+            <th class="text-center" width="180px">
+              <%= model_class.human_attribute_name(:stock_type) %><br>
+              <%= model_class.human_attribute_name(:stock_code) %><br>
+              <%= model_class.human_attribute_name(:stock_name) %></th>
+            <th class="text-center" width="120px">
+              <%= model_class.human_attribute_name(:buy_date) %><br>
+              <%= model_class.human_attribute_name(:buy_quantity) %><br>
+              <%= model_class.human_attribute_name(:buy_rate_mny) %><br>
+              取得金額
+            </th>
+            <% if !@p_list.to_s.include?(Settings.stock_holds_mode.profitloss) %>
+                <th class="text-center" width="140px">
+                  現在値単価<br>
+                  現在値評価金額<br>
+                  現在値損益
+                </th>
+            <% else %>
+                <th class="text-center" width="120px">
+                  <%= model_class.human_attribute_name(:sell_date) %><br>
+                  <%= model_class.human_attribute_name(:sell_quantity) %><br>
+                  <%= model_class.human_attribute_name(:sell_rate_mny) %><br>
+                  譲渡金額
+                </th>
+                <th class="text-center" width="110px">
+                  <%= model_class.human_attribute_name(:expenses_mny) %><br>
+                  <%= model_class.human_attribute_name(:profit_loss_mny) %></th>
+            <% end %>
+            <th class="text-center" width="<%=th_actions_width%>px"><%=t '.actions', :default => "" %></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @stock_holds.each do |stock_hold| %>
+              <tr>
+                <td class="text-left " >
+                  <%= stock_hold.name %><br>
+                  <%= stock_hold.bank_opt_name %><br>
+                  <% if stock_hold.opt == 1 or stock_hold.opt == 2%>
+                      （<%= stock_hold.year %>年度分）
+                  <% end %>
+                  <%if stock_hold.expire_flg ==1%>
+                                <span class="text-info">
+                                  <br>NISA口座有効期間切れ
+                                </span>
+                  <%end%>
+                </td>
+                <td class="text-left">
+                  <%= stock_hold.stock_type_name %><br>
+                  <%if stock_hold.stock_type == Settings.stock_type.jpn_stock %>
+                      <%= link_to stock_hold.stock_code, "/stock_infos/search2/"+ stock_hold.stock_code %><br>
+                      <%= link_to stock_hold.stock_code_name.to_s, "/stock_infos/search2/"+ stock_hold.stock_code %>
+                  <% else %>
+                      <%=stock_hold.stock_name.to_s %>
+                  <% end %>
+                </td>
+                <td class="text-right"><%= stock_hold.buy_date %><br>
+                  <%=format_num(stock_hold.buy_quantity.to_s,Settings.format_opt.quantity) %><br>
+                  <%= format_num(stock_hold.buy_rate_mny.to_s,Settings.format_opt.currency) %><br>
+                  <%= format_num((stock_hold.buy_quantity * stock_hold.buy_rate_mny).to_s,Settings.format_opt.currency) %>
+                </td>
+                <% #現在値、現在値損益
+                   if !@p_list.to_s.include?(Settings.stock_holds_mode.profitloss) %>
+                    <td class="text-right">
+                      <%if stock_hold.stock_type.to_s == Settings.stock_type.jpn_stock %>
+
+                          <%= format_num(stock_hold.end_rate_mny.to_i.to_s,Settings.format_opt.currency) %><br>
+
+                          <%= format_num((stock_hold.end_rate_mny.to_i * stock_hold.buy_quantity).to_s,Settings.format_opt.currency) %><br>
+
+                          <% if  !stock_hold.stock_name.nil? %>
+                              <% if stock_hold.profit_loss_current<0 %>
+                                        <span class="text-danger">-
+                                          <%=format_num(stock_hold.profit_loss_current.abs.to_s,Settings.format_opt.currency)  %>
+                                        </span>
+                              <% else%>
+                                        <span class="text-success">+
+                                          <%=format_num(stock_hold.profit_loss_current.abs.to_s,Settings.format_opt.currency)  %>
+                                        </span>
+                              <% end%>
+                          <% end %>
+                      <%end%>
+                      <% if stock_hold.end_rate_mny.nil? %>
+                          <div align="right">
+                            ーーー円<br>
+                            ーーー円<br>
+                            ーーー円
+                          </div>
+                      <% end %>
+                    </td>
+                <% else %>
+                    <td class="text-right">
+                      <%= stock_hold.sell_date.to_s %><br>
+                      <%= format_num(stock_hold.sell_quantity.to_s,Settings.format_opt.quantity)  %><br>
+                      <%= format_num(stock_hold.sell_rate_mny.to_s,Settings.format_opt.currency)  %><br>
+                      <%= format_num((stock_hold.sell_rate_mny*stock_hold.sell_quantity).to_s,Settings.format_opt.currency)  %>
+                    </td>
+                    <td class="text-right">
+                      <%= format_num(stock_hold.expenses_mny.to_i.to_s,Settings.format_opt.currency) %><br>
+
+                      <% if stock_hold.profit_loss_mny<0 %>
+                                        <span class="text-danger">-
+                                          <%=format_num(stock_hold.profit_loss_mny.abs.to_s,Settings.format_opt.currency)  %>
+                                        </span>
+                      <% else%>
+                                        <span class="text-success">+
+                                          <%=format_num(stock_hold.profit_loss_mny.abs.to_s,Settings.format_opt.currency)  %>
+                                        </span>
+                      <% end%>
+                    </td>
+                <% end %>
+                <td class="text-center">
+                  <%if @p_list.to_s.include?(Settings.stock_holds_mode.profitloss) %>
+                      <%= link_to t('.show', :default => t("helpers.links.show")),
+                                  stock_hold_path(stock_hold)+"/"+ Settings.stock_holds_mode.profitloss_show, :class => 'btn btn-default btn-block' %>
+                      <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                                  edit_stock_hold_path(stock_hold)+"/"+ Settings.stock_holds_mode.profitloss_edit, :class => 'btn btn-default btn-block' %>
+                      <%= link_to t('.destroy', :default => t("譲渡取消")),
+                                  stock_hold_path(stock_hold)+"/"+ Settings.stock_holds_mode.profitloss_cancel,
+                                  :method => :patch,
+                                  :data => { :confirm => "譲渡を取消してよろしいですか？ <br>保有銘柄になります。" ,cancel: "キャンセル",commit: "譲渡取消"}, title: "譲渡取消の確認",
+                                  :class => 'btn  btn-default btn-block' %>
+                  <%else%>
+                      <%= link_to t('.show', :default => t("helpers.links.show")),
+                                  stock_hold_path(stock_hold)+"/"+ Settings.stock_holds_mode.hold_show, :class => 'btn btn-default btn-block' %>
+                      <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                                  edit_stock_hold_path(stock_hold) +"/"+Settings.stock_holds_mode.hold_edit, :class => 'btn btn-default btn-block' %>
+                      <%= link_to t('.edit', :default => t("譲渡")),
+                                  edit_stock_hold_path(stock_hold) +"/"+Settings.stock_holds_mode.hold_sell, :class => 'btn btn-default btn-block' %>
+                      <%if stock_hold.stock_type == Settings.stock_type.jpn_stock %>
+                          <%= link_to "配当金・分配金登録", "/dividends/new/jpn_stock/"  + stock_hold.bank_id.to_s  + "/" + stock_hold.stock_type.to_s + "/"  + stock_hold.stock_code.to_s,
+                                      :class => 'btn btn-default btn-block'%>
+                      <% else%>
+                          <%= link_to "配当金・分配金登録", "/dividends/new/jpn_other_stock/"  + stock_hold.bank_id.to_s + "/" + stock_hold.stock_type.to_s + "/"  + stock_hold.stock_name.to_s ,
+                                      :class => 'btn btn-default btn-block'%>
+                      <% end%>
+                  <%end%>
+                  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                              stock_hold_path(stock_hold),
+                              :method => :delete,
+                              :data => { :confirm => "削除してよろしいですか？" ,cancel: "キャンセル",commit: "削除"}, title: "削除確認",
+                              :class => 'btn btn-default btn-block' %>
+                </td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+        <% if !@p_list.to_s.include?(Settings.stock_holds_mode.profitloss) %>
+        <span class="text-info " >
+          <dl id="info_list">
+            <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>現在値、始値、安値、高値は参考金額（毎営業日18:00に市場値反映）</dd>
+            <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>現在値、始値、安値、高値は国内株式のみ表示</dd>
+          </dl>
+        </span>
+        <%end %>
+        <%= paginate @stock_holds %><br>
+    <% end %>
+
+  </div>
+  <div class="tab-pane fade<%=search_act2%>" id="tab_search">
+    <fieldset>
+      <legend>検索条件</legend>
+      <%= search_form_for(@q, :url => {:action => :index}) do |f| %>
+          <div class="form-group form-inline">
+            口座
+            <%= f.collection_select :bank_id_eq, Bank.where('user_id = ?',current_user.id).order("year desc,opt asc ,name asc").all, :id, :year_and_name, {:include_blank => true} ,{:class => "form-control"} %><br><br>
+            口座種類
+            <%= f.collection_select :stock_type_eq, SystemCode.where('opt = ? ','003').order("sort").all, :key, :name, {:include_blank => true} ,{:class => "form-control",:style => "width:200px"} %>
+
+
+            <div id="mobile-menu" class="visible-sm visible-xs" style="white-space:nowrap;">
+              <br><br>
+            </div>
+
+
+
+            銘柄コード
+            <%= f.text_field :stock_code_eq, class: "form-control", placeholder: "完全一致",:style=> 'width: 110px',:maxlength =>4%>
+            <div id="mobile-menu" class="visible-sm visible-xs" style="white-space:nowrap;">
+              <br>
+            </div>
+            <%= f.submit '検索', class: "btn btn-default" %>
+            <%= link_to 'クリア', request.path, class: "btn btn-default" %>
+          </div>
+      <% end %>
+    </fieldset>
+  </div>
+</div>
+<% if @stock_holds.records.count ==0 then%>
+    <span class="text-info " >
+      <dl id="info_list">
+        <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>該当する銘柄はありません</dd>
+      </dl>
+    </span>
+<%end%>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('table').resTables();
+    });
+</script>

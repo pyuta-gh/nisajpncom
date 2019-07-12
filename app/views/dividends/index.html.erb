@@ -1,0 +1,118 @@
+<%- model_class = Dividend -%>
+  <h3><%=t '.title', :default => "配当金・分配金" %></h3>
+<%
+   list_act  =""
+   list_act2  =""
+   search_act =""
+   search_act2 =""
+   if @dividends.records.count >0 then
+     list_act ="active"
+     list_act2 =" in active"
+   else
+     search_act ="active"
+     search_act2 =" in active"
+   end
+%>
+<div id="navi">
+  <ul class="nav nav-tabs nav-justified">
+    <li class="<%=list_act%>"><a href="#tab_list" data-toggle="tab"><i class="glyphicon glyphicon-list-alt"></i>リスト表示</a></li>
+    <li class="<%=search_act%>"><a href="#tab_search" data-toggle="tab"><i class="glyphicon glyphicon-search"></i>検索</a></li>
+  </ul>
+</div>
+<div id="myTabContent" class="tab-content">
+  <br>
+  <div class="tab-pane fade<%=list_act2%>" id="tab_list">
+    <% if @dividends.records.count >0 then%>
+        <table class="table table-striped table-bordered table-condensed" style="table-layout:fixed;width:580px;" >
+          <thead>
+          <tr>
+            <th class="text-center" style="width:185px;">口座名<br>（口座種類）<br>（NISA年度）</th>
+            <th class="text-center" style="width:175px;">入金日<br>株式分類<br>銘柄コード<br>銘柄名</th>
+            <th class="text-center" style="width:135px;"><%= model_class.human_attribute_name(:pay_rate_mny) %><br>
+              <%= model_class.human_attribute_name(:pay_quantity) %><br>
+              配当金&nbsp;分配金</th>
+            <th class="text-center" style="width:75px;"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @dividends.each do |dividend| %>
+              <tr>
+                <td  class="text-left" >
+                  <%= dividend.bank_name %><br>
+                  （<%= dividend.bank_type_name %>）
+                  <%if !dividend.bank_year.nil?%>
+                      （<%= dividend.bank_year %>年度）
+                  <%end%>
+
+                </td>
+                <td class="text-left" >
+                  <%= dividend.pay_date %><br>
+                  <%= dividend.stock_type_name %><br>
+                  <%if dividend.stock_type == Settings.stock_type.jpn_stock %>
+                      <%= dividend.stock_code %><br>
+                  <% end %>
+                  <%= dividend.stock_name %>
+                </td>
+                <td class="text-right" >
+                  <%= format_decimal((dividend.pay_rate_mny).to_s,Settings.format_opt.currency,2) %><br>
+                  <%= format_num((dividend.pay_quantity).to_s,Settings.format_opt.quantity) %><br>
+                  <%= format_num((dividend.pay_profit_mny).to_s,Settings.format_opt.currency) %>
+                </td>
+                <td class="text-center" >
+                  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                              edit_dividend_path(dividend), :class => 'btn btn-default btn-block' %>
+                  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                              dividend_path(dividend),
+                              :method => :delete,
+                              :data => { :confirm => "削除してよろしいですか？" ,cancel: "キャンセル",commit: "削除"}, title: "削除確認",
+                              :class => 'btn  btn-default  btn-block' %>
+                </td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+        <%= paginate @dividends %><br>
+    <% end %>
+    <%= link_to t('.new', :default => t("helpers.links.new")),
+                new_dividend_path,
+                :class => 'btn btn-default' %>
+  </div>
+  <div class="tab-pane fade<%=search_act2%>" id="tab_search">
+    <fieldset>
+      <legend>検索条件</legend>
+      <%= search_form_for(@q, :url => {:action => :index}) do |f| %>
+          <div class="form-group form-inline">
+            口座
+            <%= f.collection_select :bank_id_eq, Bank.where('user_id = ?',current_user.id).order("year desc,opt asc ,name asc").all, :id, :year_and_name, {:include_blank => true} ,{:class => "form-control"} %><br><br>
+            口座種類
+            <%= f.collection_select :stock_type_eq, SystemCode.where('opt = ? ','003').order("sort").all, :key, :name, {:include_blank => true} ,{:class => "form-control",:style => "width:200px"} %>
+
+
+            <div id="mobile-menu" class="visible-sm visible-xs" style="white-space:nowrap;">
+              <br><br>
+            </div>
+
+            銘柄コード
+            <%= f.text_field :stock_code_eq, class: "form-control", placeholder: "完全一致",:style=> 'width: 110px',:maxlength =>4%>
+            <div id="mobile-menu" class="visible-sm visible-xs" style="white-space:nowrap;">
+              <br>
+            </div>
+            <%= f.submit '検索', class: "btn btn-default" %>
+            <%= link_to 'クリア', request.path, class: "btn btn-default" %>
+          </div>
+      <% end %>
+    </fieldset>
+  </div>
+</div>
+<% if @dividends.records.count ==0 then%>
+    <span class="text-info " >
+      <dl id="info_list">
+        <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>該当する配当金・分配金はありません</dd>
+      </dl>
+    </span>
+<%end%>
+<br><br>
+<br>
+<br>
+
+

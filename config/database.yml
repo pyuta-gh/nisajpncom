@@ -1,0 +1,12 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  username: root
+  password: password
+  host: db
+  database: nisa
+development:
+  <<: *default
+production:
+  <<: *default

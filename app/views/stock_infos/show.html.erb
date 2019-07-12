@@ -1,0 +1,39 @@
+<%- model_class = StockInfo -%>
+
+  <h3><%="銘柄情報"  %></h3>
+  <h3><%=@stock_info.stock_name.to_s%></h3>
+
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:market_code) %>:</strong></dt>
+  <dd><%= @market_name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:stock_code) %>:</strong></dt>
+  <dd><%= @stock_info.stock_code %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:stock_name) %>:</strong></dt>
+  <dd><%= @stock_info.stock_name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:end_rate_mny) %>:</strong></dt>
+  <dd><%= format_num(@stock_info.end_rate_mny,Settings.format_opt.currency) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:min_rate_mny) %>:</strong></dt>
+  <dd><%= format_num(@stock_info.min_rate_mny,Settings.format_opt.currency) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:max_rate_mny) %>:</strong></dt>
+  <dd><%= format_num(@stock_info.max_rate_mny,Settings.format_opt.currency) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:start_rate_mny) %>:</strong></dt>
+  <dd><%= format_num(@stock_info.start_rate_mny,Settings.format_opt.currency) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:buy_sell_quantity) %>:</strong></dt>
+  <dd><%= format_num(@stock_info.buy_sell_quantity,Settings.format_opt.currency) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:trading_sum_mny) %>:</strong></dt>
+  <dd><%= format_num(@stock_info.trading_sum_mny,Settings.format_opt.currency) %></dd>
+</dl>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              stock_infos_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_stock_info_path(@stock_info), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              stock_info_path(@stock_info),
+              :method => 'delete',
+            :data => { :confirm => "削除してよろしいですか？" ,cancel: "キャンセル",commit: "削除"}, title: "削除確認",
+              :class => 'btn btn-default' %>
+<br>
+<br>
+<br>

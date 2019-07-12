@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% if Rails.env == 'production'%>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-91210701-1"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-91210701-1');
+      </script>
+    <%end %>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ニーサジャパン.comは、NISA口座、特定口座、一般口座が一元管理できる無料サービスです。ご家族、証券会社毎の複数の口座が一元管理できます。NISA口座は、年度別、口座別にNISA枠、保有、譲渡、配当金、分配金を管理できます。"/>
+    <meta name="Keywords" content="NISA,ニーサ,少額投資非課税制度,株式,株価" />
+    <title>NISA口座/株式口座管理 ニーサジャパン.com</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag "application", :media => "all" %>
+
+    <!-- For third-generation iPad with high-resolution Retina display: -->
+    <!-- Size should be 144 x 144 pixels -->
+    <%= favicon_link_tag 'apple-touch-icon-144x144-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '144x144' %>
+
+    <!-- For iPhone with high-resolution Retina display: -->
+    <!-- Size should be 114 x 114 pixels -->
+    <%= favicon_link_tag 'apple-touch-icon-114x114-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '114x114' %>
+
+    <!-- For first- and second-generation iPad: -->
+    <!-- Size should be 72 x 72 pixels -->
+    <%= favicon_link_tag 'apple-touch-icon-72x72-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '72x72' %>
+
+    <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+    <!-- Size should be 57 x 57 pixels -->
+    <%= favicon_link_tag 'apple-touch-icon-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png' %>
+
+    <!-- For all other devices -->
+    <!-- Size should be 32 x 32 pixels -->
+    <%= favicon_link_tag 'favicon.ico', :rel => 'shortcut icon' %>
+
+    <%= javascript_include_tag "application" %>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js" type="text/javascript"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=600">
+  </head>
+
+  <body>
+
+  <!-- ページのコンテンツすべてをwrapする（フッター以外） -->
+  <div id="wrap">
+    <!-- ここからページのコンテンツ -->
+    <div class="container">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand"><b>ニーサジャパン.com</b></a>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-left">
+              <li class="dropdown">
+                <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="link-menu">口座管理<span class="caret"></span></span></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "資産状況", "/" %></li>
+                  <li><%= link_to "口座登録", "/banks" %></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="/stock_holds/list/<%=Settings.stock_holds_list.year%>" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="link-menu">保有銘柄<span class="caret"></span></span></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "年度別の昇順", "/stock_holds/list/" + Settings.stock_holds_list.year  %></li>
+                  <li><%= link_to "銘柄別の昇順", "/stock_holds/list/"  + Settings.stock_holds_list.stock %></li>
+                  <li><%= link_to "口座分類別の昇順", "/stock_holds/list/"  + Settings.stock_holds_list.bank %></li>
+                  <li><%= link_to "現在値）利益の降順", "/stock_holds/list/" + Settings.stock_holds_list.profit_current  %></li>
+                  <li><%= link_to "現在値）損失の降順", "/stock_holds/list/" + Settings.stock_holds_list.loss_current  %></li>
+                  <li role="separator" class="divider"></li>
+                  <li><%= link_to "保有銘柄の新規登録", "/stock_holds/new/"  + Settings.stock_holds_mode.hold_new  %></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="/stock_holds/list/<%=Settings.stock_holds_list.profit_loss_year %>" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="link-menu">譲渡銘柄<span class="caret"></span></span></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "年度別の昇順", "/stock_holds/list/" + Settings.stock_holds_list.profit_loss_year  %></li>
+                  <li><%= link_to "銘柄別の昇順", "/stock_holds/list/"  + Settings.stock_holds_list.profit_loss_stock %></li>
+                  <li><%= link_to "口座分類別の昇順", "/stock_holds/list/"  + Settings.stock_holds_list.profit_loss_bank %></li>
+                  <li><%= link_to "利益の降順", "/stock_holds/list/" + Settings.stock_holds_list.profit_loss_profit  %></li>
+                  <li><%= link_to "損失の降順", "/stock_holds/list/" + Settings.stock_holds_list.profit_loss_loss  %></li>
+                  <li role="separator" class="divider"></li>
+                  <li><%= link_to "譲渡銘柄の新規登録", "/stock_holds/new/"  + Settings.stock_holds_mode.profitloss_new %></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="/stock_infos" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="link-menu">株価情報<span class="caret"></span></span></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "銘柄検索", "/stock_infos" %></li>
+                  <li><%= link_to "ウオッチリスト", "/stock_monitors" %></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="/dividends" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="link-menu">配当管理<span class="caret"></span></span></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "配当金・分配金一覧", "/dividends" %></li>
+                  <li><%= link_to "配当金・分配金の新規登録", "/dividends/new" %></li>
+                </ul>
+              </li>
+              <% if user_signed_in? %>
+                  <li class="dropdown">
+                    <a href="/messages" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="link-menu"><i class="glyphicon glyphicon-user"></i>マイページ<span class="caret"></span>
+
+                              <% if @messages_no_read.records.count >0 %>
+                                <span class="badge badge-info">
+                                   <%= @messages_no_read.records.count %>
+                                </span>
+                             <%end%></span></a>
+                    <ul class="dropdown-menu">
+                      <li><%= link_to "お知らせ", "/messages"  %></li>
+                      <li><%= link_to "プロフィール変更", edit_user_registration_path  %></li>
+                      <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete  %></li>
+                    </ul>
+                  </li>
+              <% else %>
+                  <li><%= link_to "ログイン", "/users/sign_in"  %></li>
+                  <li><%= link_to "アカウント登録", "/users/sign_up"   %></li>
+              <% end %>
+              <li class="dropdown">
+                <a href="/system_infos" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <span class="link-menu"><i class="glyphicon glyphicon-user"></i>サポート<span class="caret"></span></span></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "メンテナンス情報", "/system_infos"  %></li>
+                  <li><%= link_to "お問い合わせ", "/inquiry"  %></li>
+                  <li><%= link_to "利用規約", "/rules/index"  %></li>
+                </ul>
+              </li>
+            </ul>
+            <!--<ul class="nav navbar-nav navbar-left">-->
+
+            <!--</ul>-->
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+
+
+      <div class="container">
+        <div class="row">
+          <div class="col-md-9">
+
+            <% #bootstrap_flash メッセージをtoastrのjsでダイアログ表示
+               toastr_msg = bootstrap_flash.to_s.remove('<div class="alert fade in alert-success ">').to_s.remove('</div>').to_s
+               toastr_msg =toastr_msg.remove('<button type="button" class="close" data-dismiss="alert">&times;</button>')
+               toastr_msg =toastr_msg.remove('<div class="alert fade in alert-danger ">')
+            %>
+
+               <%if toastr_msg != ''%>
+                <script type="text/javascript">
+                     toastrMsg('<%=toastr_msg%>');
+                </script>
+            <%end%>
+            <%= yield %>
+          </div>
+
+          <div class="col-md-3">
+            <div id="mobile-menu" class="visible-md visible-lg" style="white-space:nowrap;">
+                <form class="navbar-form navbar-left"  method="post" action="/stock_infos/search2">
+                    <div class="form-group">
+                        <input name="p_list" type="text" class="form-control" placeholder="" style="width:120px;" maxlength="10">
+                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>銘柄検索</button>
+                    </div>
+                </form>
+            </div>
+
+
+            <div id="mobile-menu" class="visible-md visible-lg" style="white-space:nowrap;">
+              <br>
+              <br>
+              <dl>
+
+                <% @affiliate_finance.each do |affiliate| %>
+                    <dt><%= raw(affiliate.a_tag) %></dt><dd></dd><br>
+                <% end %>
+                <% @affiliate_pc.each do |affiliate| %>
+                    <dt><%= raw(affiliate.a_tag) %></dt><dd></dd><br>
+                <% end %>
+
+                <dt>
+                  <!-- Rakuten Widget FROM HERE --><script type="text/javascript">rakuten_design="slide";rakuten_affiliateId="1595a1e9.c9f19dc5.1595a1ea.3b4d4402";rakuten_items="ranking";rakuten_genreId=0;rakuten_size="300x250";rakuten_target="_blank";rakuten_theme="gray";rakuten_border="on";rakuten_auto_mode="on";rakuten_genre_title="off";rakuten_recommend="on";</script><script type="text/javascript" src="https://xml.affiliate.rakuten.co.jp/widget/js/rakuten_widget.js"></script><!-- Rakuten Widget TO HERE -->
+                </dt>
+                <dt>
+                  <!--amazonアフィリエイト-->
+                  <script type="text/javascript">amzn_assoc_ad_type ="responsive_search_widget"; amzn_assoc_tracking_id ="sepro-22"; amzn_assoc_marketplace ="amazon"; amzn_assoc_region ="JP"; amzn_assoc_placement =""; amzn_assoc_search_type = "search_widget";amzn_assoc_width ="300"; amzn_assoc_height ="400"; amzn_assoc_default_search_category =""; amzn_assoc_default_search_key ="";amzn_assoc_theme ="light"; amzn_assoc_bg_color ="FFFFFF"; </script><script src="//z-fe.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&Operation=GetScript&ID=OneJS&WS=1&Marketplace=JP"></script>
+
+                </dt>
+              </dl>
+            </div>
+
+
+          </div>
+        </div><!--/row-->
+      </div> <!-- /container -->
+    </div>
+  </div>
+
+  <!-- フッターは#wrapの外に -->
+  <div id="footer">
+    <div class="container">
+      <!-- コンテンツ -->
+      <div id="mobile-menu" class="visible-sm visible-xs" style="white-space:nowrap;">
+        <% @affiliate_sm.each do |affiliate| %>
+            <%= raw(affiliate.a_tag) %>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+
+  </body>
+</html>
+

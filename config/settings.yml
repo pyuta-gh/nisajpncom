@@ -1,0 +1,48 @@
+stock_holds_list:
+  assets              : 'assets'           #資産状況
+  year                : 'year'             #保有銘柄（年度別）
+  stock               : 'stock'            #保有銘柄（銘柄別）
+  bank                : 'bank'             #保有銘柄（口座分類別）
+  profit_current      : 'profit_current'   #保有銘柄（現在値 利益リスト）
+  loss_current        : 'loss_current'     #保有銘柄（現在値 損失リスト）
+  profit_loss_year    : 'profitloss_year'  #保有銘柄（譲渡損益 年度別）
+  profit_loss_stock   : 'profitloss_stock' #保有銘柄（譲渡損益 銘柄別）
+  profit_loss_bank    : 'profitloss_bank'  #保有銘柄（譲渡損益 口座分類別）
+  profit_loss_profit  : 'profitloss_profit' #保有銘柄（譲渡損益 利益リスト）
+  profit_loss_loss    : 'profitloss_loss'  #保有銘柄（譲渡損益 損失リスト）
+  monitor             : 'stock_monitor'    #保有銘柄（株価監視）
+stock_holds_list_name:
+  assets              : '資産状況'              #資産状況
+  year                : '保有銘柄（年度別の昇順）'     #保有銘柄（年度別）
+  stock               : '保有銘柄（銘柄別の昇順）'     #保有銘柄（銘柄別）
+  bank                : '保有銘柄（口座分類別の昇順）'  #保有銘柄（口座分類別）
+  profit_current      : '保有銘柄（現在値 利益の降順）'  #保有銘柄（現在値 利益リスト）
+  loss_current        : '保有銘柄（現在値 損失の降順）'  #保有銘柄（現在値 損失リスト）
+  profit_loss_year    : '譲渡銘柄（年度別の昇順）'  #保有銘柄（譲渡損益 年度別）
+  profit_loss_stock   : '譲渡銘柄（銘柄別の昇順）' #保有銘柄（譲渡損益 銘柄別）
+  profit_loss_bank    : '譲渡銘柄（口座分類別の昇順）'  #保有銘柄（譲渡損益 口座分類別）
+  profit_loss_profit  : '譲渡銘柄（利益の降順）' #保有銘柄（譲渡損益 利益リスト）
+  profit_loss_loss    : '譲渡銘柄（損失の降順）'  #保有銘柄（譲渡損益 損失リスト）
+  monitor             : '株価監視銘柄'   #保有銘柄（株価監視）
+stock_holds_mode:
+  hold_new           : 'hold_new' #新規
+  hold_show           : 'hold_show' #詳細表示
+  hold_edit           : 'hold_edit' #編集
+  hold_sell           : 'hold_sell' #保有売却
+  profitloss          : 'profitloss' #譲渡損益 譲渡損益のURL識別用
+  profitloss_new      : 'profitloss_new' #新規
+  profitloss_show     : 'profitloss_show' #詳細表示
+  profitloss_edit     : 'profitloss_edit' #編集
+  profitloss_cancel   : 'profitloss_cancel' #キャンセル
+stock_type:
+  jpn_stock  : 'jpn_stock'          #国内株式
+  investment : 'investment' #投資信託
+  foreign_stock  : 'foreign_stock' #外国株式
+  other : 'other'
+format_opt:
+  currency  : '円'
+  quantity  : '株'
+  count     : '件'
+nisa:
+  expire_years: '5'
+

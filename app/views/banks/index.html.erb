@@ -1,0 +1,64 @@
+<%- model_class = Bank -%>
+  <h3><%=t '.title', :default => "口座登録" %></h3>
+
+<% if @banks.records.count >0 then%>
+    <table class="table table-striped table-bordered table-condensed" style="table-layout:fixed;width:590px;">
+      <thead>
+      <tr>
+        <th class="text-center" style="width:160px;"><%= model_class.human_attribute_name(:opt) %><br>NISA年度</th>
+        <th class="text-center" style="width:250px;"><%= model_class.human_attribute_name(:name) %></th>
+        <th class="text-center" style="width:160px;"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @banks.each do |bank| %>
+          <tr>
+            <td class="text-center">
+              <%= bank.bank_opt_name %>
+              <%if bank.opt ==1 or bank.opt==2%>
+                  <br><%= bank.year %>年度
+                  <%if bank.expire_flg ==true%>
+                    <span class="text-info">
+                      <br>NISA口座有効期間切れ
+                    </span>
+                  <%end%>
+
+              <%end%>
+            </td>
+            <td class="text-left"><%= bank.name %></td>
+            <td>
+              <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                          edit_bank_path(bank), :class => 'btn btn-default btn-block'%>
+
+              <%= link_to "保有銘柄登録", "/banks/hold/"  + bank.id.to_s  ,
+                          :class => 'btn btn-default btn-block'%>
+
+              <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                          bank_path(bank),
+                          :method => :delete,
+                          :data => { :confirm => "削除してよろしいですか？" ,cancel: "キャンセル",commit: "削除"}, title: "削除確認",
+                          :class => 'btn  btn-default  btn-block' %>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+    <%= paginate @banks %><br>
+
+<% else%>
+    <span class="text-info " >
+      <dl id="info_list">
+        <dt><i class="glyphicon glyphicon-warning-sign"></i></dt><dd>はじめに口座情報を登録してください</dd>
+        <dt><i class="glyphicon glyphicon-warning-sign"></i></dt><dd>保有銘柄、譲渡損益のサービスは、NISA口座の登録が必要です</dd>
+      </dl>
+    </span>
+<% end %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_bank_path,
+            :class => 'btn btn-default' %>
+<br>
+<br>
+<br>
+<br>
+

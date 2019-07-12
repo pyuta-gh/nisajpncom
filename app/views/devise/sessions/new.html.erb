@@ -1,0 +1,49 @@
+<div class="panel panel-default devise-bs">
+  <div class="panel-heading">
+    <h1>NISA/株式口座管理 ニーサジャパン.com</h1>
+    <span class="text-info " >
+      <dl id="info_list">
+        <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>少額投資非課税制度のNISA口座を管理する無料サービスです</dd>
+        <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>口座別、年度別に保有、譲渡、配当、NISA枠を管理できます</dd>
+        <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>グラフ表示、ウオッチリスト、株価情報等の機能を提供します</dd>
+        <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>NISA口座の管理機能を強化してますが、特定口座、一般口座も管理できます</dd>
+        <dt><i class="glyphicon glyphicon-info-sign"></i></dt><dd>複数証券会社、ご家族の口座を一元管理できます</dd>
+      </dl>
+    </span>
+  </div>
+  <div class="panel-heading">
+    <h4><%= t('.sign_in', :default => "Sign in") %></h4>
+  </div>
+  <div class="panel-body">
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { role: "form" }) do |f| %>
+        <div class="form-group">
+          <%= f.label :email %>
+          <%= f.email_field :email, autofocus: true, class: "form-control" ,:maxlength =>"50"%>
+        </div>
+        <div class="form-group">
+          <%= f.label :password %>
+          <%= f.password_field :password, autocomplete: "off", class: "form-control" ,:maxlength =>"50"%>
+        </div>
+        <% if devise_mapping.rememberable? %>
+            <div class="checkbox">
+              <%= f.label :remember_me do %>
+                  <%= f.check_box :remember_me %> <%= t('.remember_me', :default => "Remember me") %>
+              <% end %>
+            </div>
+        <% end %>
+        <%= f.submit  t('.sign_in', :default => "Sign in"), class: "btn btn-default" %>
+        <%= link_to "アカウント登録", "/users/sign_up",
+                    :class => 'btn btn-default'%><br>
+    <% end %>
+  </div>
+</div>
+<br>
+<span style="float: right;">
+<%= render "devise/shared/links" %>
+</span>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>

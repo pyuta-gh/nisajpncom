@@ -1,0 +1,122 @@
+<%- model_class = StockHold -%>
+
+  <%
+  #登録、更新時の戻り先は、一覧画面
+  if (!@stock_hold.sell_quantity.nil?)%>
+    <h3>譲渡損益</h3>
+  <% else%>
+      <h3>保有銘柄</h3>
+  <%end %>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:bank_id) %>:</strong></dt>
+  <dd>
+    <%= @stock_hold.bank_name.to_s %>
+  </dd>
+  <dt><strong>口座種類:</strong>
+  <dd>
+      <%=@bank_opt_name.to_s%><br>
+      <% if @stock_hold.bank_opt == 1 or @stock_hold.bank_opt == 2 %>
+          （<%=@stock_hold.bank_year.to_s%> 年度分）
+            <%if @bank_expire_flg ==true%>
+                        <span class="text-info">
+                          <br>NISA口座有効期間切れ
+                        </span>
+            <%end%>
+      <% end %>
+  </dd>
+  <dt><strong><%= model_class.human_attribute_name(:stock_type) %>:</strong></dt>
+  <dd><%= @stock_type_name %></dd>
+  <% #国内株式の場合、銘柄コード表示
+    if @stock_hold.stock_type == Settings.stock_type.jpn_stock
+  %>
+      <dt><strong><%= model_class.human_attribute_name(:stock_code) %>:</strong></dt>
+      <dd><%= @stock_hold.stock_code %></dd>
+  <%
+     end
+  %>
+  <dt><strong><%= model_class.human_attribute_name(:stock_name) %>:</strong></dt>
+  <dd><%= @stock_hold.stock_name %></dd>
+
+  <dt><strong><%= model_class.human_attribute_name(:buy_date) %>:</strong></dt>
+  <dd><%= @stock_hold.buy_date %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:buy_rate_mny) %>:</strong></dt>
+  <dd><%= format_num(@stock_hold.buy_rate_mny,Settings.format_opt.currency) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:buy_quantity) %>:</strong></dt>
+  <dd><%= format_num(@stock_hold.buy_quantity,Settings.format_opt.quantity) %></dd>
+  <dt><strong>取得金額:</strong></dt>
+  <dd><%= format_num(@stock_hold.buy_quantity * @stock_hold.buy_rate_mny,Settings.format_opt.currency) %></dd>
+  <% if !@stock_hold.sell_quantity.nil? %>
+      <dt><strong><%= model_class.human_attribute_name(:sell_date) %>:</strong></dt>
+      <dd><%= @stock_hold.sell_date %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:sell_rate_mny) %>:</strong></dt>
+      <dd><%= format_num(@stock_hold.sell_rate_mny,Settings.format_opt.currency) %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:sell_quantity) %>:</strong></dt>
+      <dd><%= format_num(@stock_hold.sell_quantity,Settings.format_opt.quantity) %></dd>
+      <dt><strong>譲渡金額:</strong></dt>
+      <dd><%= format_num(@stock_hold.sell_quantity * @stock_hold.sell_rate_mny,Settings.format_opt.currency) %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:expenses_mny) %>:</strong></dt>
+      <dd><%= format_num(@stock_hold.expenses_mny.to_i,Settings.format_opt.currency) %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:profit_loss_mny) %>:</strong></dt>
+      <dd>
+        <% unless  @stock_hold.profit_loss_mny.nil? %>
+            <% if @stock_hold.profit_loss_mny<0 %>
+                                      <span class="text-danger">
+            <% end%>
+            <%=format_num(@stock_hold.profit_loss_mny.to_s,Settings.format_opt.currency)  %>
+            <% if @stock_hold.profit_loss_mny<0 %>
+                </span>
+            <% end%>
+        <% end %>
+      </dd>
+  <%end%>
+</dl>
+
+<%if !@stock_hold2.nil?%>
+    <h3>※譲渡後の保有株</h3>
+    <dl class="dl-horizontal">
+      <dt><strong><%= model_class.human_attribute_name(:buy_date) %>:</strong></dt>
+      <dd><%= @stock_hold2["buy_date"] %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:buy_rate_mny) %>:</strong></dt>
+      <dd><%= format_num(@stock_hold2["buy_rate_mny"],Settings.format_opt.currency) %></dd>
+      <dt><strong><%= model_class.human_attribute_name(:buy_quantity) %>:</strong></dt>
+      <dd><%= format_num(@stock_hold2["buy_quantity"],Settings.format_opt.quantity) %></dd>
+      <dt><strong>取得金額:</strong></dt>
+      <dd><%= format_num(@stock_hold2["buy_quantity"] * @stock_hold2["buy_rate_mny"],Settings.format_opt.currency) %></dd>
+    </dl>
+<%end%>
+<%
+   #戻るボタンの遷移
+   if (request.referrer.to_s.include?(stock_holds_path+"/list") )%>
+    <%= link_to t('.back', :default => t("helpers.links.back")),
+                (request.referrer.to_s), :class => 'btn btn-default'  %>
+<% else %>
+    <%= link_to t('.back', :default => t("保有銘柄")),
+                stock_holds_path+"/list/year", :class => 'btn btn-default'  %>
+    <%= link_to t('.back', :default => t("譲渡銘柄")),
+                stock_holds_path+"/list/profitloss_year", :class => 'btn btn-default'  %>
+<%    end %>
+<%
+   if !@stock_hold.sell_quantity.nil?
+     edit_url = edit_stock_hold_path(@stock_hold)+"/"+Settings.stock_holds_mode.profitloss_edit
+   else
+     edit_url = edit_stock_hold_path(@stock_hold)+"/"+Settings.stock_holds_mode.hold_edit
+   end
+%>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+            edit_url, :class => 'btn btn-default' %>
+<% if !@stock_hold.sell_quantity.nil?%>
+<%= link_to t('.destroy', :default => t("譲渡取消")),
+            stock_hold_path(@stock_hold)+"/"+ Settings.stock_holds_mode.profitloss_cancel,
+            :method => :patch,
+            :data => { :confirm => "譲渡を取消してよろしいですか？ <br>保有銘柄になります。" ,cancel: "キャンセル",commit: "譲渡取消"}, title: "譲渡取消の確認",
+            :class => 'btn  btn-default' %>
+    <% end %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              stock_hold_path(@stock_hold),
+              :method => 'delete',
+              :data => { :confirm => "削除してよろしいですか？" ,cancel: "キャンセル",commit: "削除"}, title: "削除確認",
+              :class => 'btn btn-default' %>
+<br>
+<br>
+<br>

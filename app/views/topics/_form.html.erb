@@ -1,0 +1,28 @@
+<% if @topic.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h2><%= @topic.errors.count %>件のエラーがあります。</h2>
+
+      <ul>
+        <% @topic.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+<%= simple_form_for @topic, :html => { :class => 'form-horizontal' 'text-left'} do |f| %>
+  <%= f.input :category ,:input_html => {:maxlength =>30,:style=> 'width: 430px'}%>
+  <%= f.input :title, :input_html => {:maxlength =>400,:style=> 'width: 430px'} %>
+  <%= f.input :link ,:input_html => {:maxlength =>200,:style=> 'width: 430px'}%>
+    <div class="input-group date-range-picker-width" >
+      <%= f.input :pubDate , as: :date_picker , :input_html => {:maxlength =>10,:style=> 'width: 130px'}%>
+    </div>
+
+
+
+  <%= f.button :submit, :class => 'btn-default' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                topics_path, :class => 'btn btn-default' %>
+<% end %>
+<br>
+<br>
+<br>

@@ -1,0 +1,28 @@
+<% if @stock_info.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h2><%= @stock_info.errors.count %>件のエラーがあります。</h2>
+
+      <ul>
+        <% @stock_info.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+<%= simple_form_for @stock_info, :html => { :class => 'form-horizontal' 'text-left'} do |f| %>
+  <%= f.input :market_code, collection: SystemCode.where('opt =?','002').order("sort").all.map { |v| [v.name, v.key] },:input_html => {:style=> 'width: 120px'}%>
+  <%= f.input :stock_code, :input_html => {:maxlength =>4,:style=> 'width: 120px'} %>
+  <%= f.input :stock_name, :input_html => {:maxlength =>100,:style=> 'width: 430px'}%>
+  <%= f.input :end_rate_mny ,as: :string, :input_html => {:maxlength =>7,:style=> 'width: 100px'} %>
+  <%= f.input :start_rate_mny ,as: :string, :input_html => {:maxlength =>7,:style=> 'width: 100px'}%>
+  <%= f.input :max_rate_mny ,as: :string, :input_html => {:maxlength =>7,:style=> 'width: 100px'}%>
+  <%= f.input :min_rate_mny ,as: :string, :input_html => {:maxlength =>7,:style=> 'width: 100px'}%>
+  <%= f.input :buy_sell_quantity ,as: :string, :input_html => {:maxlength =>15,:style=> 'width: 200px'}%>
+  <%= f.input :trading_sum_mny ,as: :string, :input_html => {:maxlength =>15,:style=> 'width: 200px'}%>
+  <%= f.button :submit, :class => 'btn-default' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                stock_infos_path, :class => 'btn btn-default' %>
+<% end %>
+<br>
+<br>
+<br>

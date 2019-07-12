@@ -1,0 +1,53 @@
+<% if @bank.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h2><%= @bank.errors.count %>件のエラーがあります。</h2>
+
+      <ul>
+        <% @bank.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+
+<%= simple_form_for @bank, :html => { :class => 'form-horizontal' 'text-left'} do |f| %>
+  <%if @stockHold_exist == false or @stockHold_exist.nil?%>
+        <%
+           if @bank.opt.nil?
+             check_value  = 1
+           else
+             check_value    = @bank.opt
+           end
+        %><br>
+        <div id ="set_bank_year"   >
+        <%= f.input :opt, collection: [["NISA口座", 1],["ジュニアNISA口座", 2],["特定口座", 3],["一般口座", 4]], checked: check_value, as: :radio_buttons, item_wrapper_class: "inline" %>
+          </div>
+        <div id ="year_field"   >
+          <%= f.input :year, collection: SystemCode.where('opt = ? AND system_codes.key <=?','001',Date.today.year.to_s).order("name desc").all.map { |v| [v.name, v.key] },:input_html => {:style=> 'width: 80px'}%><br>
+        </div>
+        <%= f.input :name,:input_html => {:maxlength =>25,:style=> 'width: 480px'}%>
+  <%else%>
+        <%= f.label :opt %><br>
+        <%= @bank_opt_name %>
+        <br><br>
+        <%if @bank.opt ==1 or @bank.opt ==2 %>
+            <%= f.label :year %><br>
+            <%= SystemCode.where('opt = ? AND system_codes.key <=?','001',:year).first.name %><br><br>
+        <%end %>
+        <%= f.input :name,:input_html => {:maxlength =>25,:style=> 'width: 480px' }%>
+
+   <%end%>
+
+  <%= f.button :submit, :class => 'btn-default' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                banks_path, :class => 'btn btn-default' %>
+<% end %>
+
+<%if !(@stockHold_exist == false or @stockHold_exist.nil?)%>
+    <br>
+    <span class="text-info">※口座に銘柄登録があるため、口座名以外は変更不可</span>
+
+<% end %>
+<br>
+<br>
+<br>

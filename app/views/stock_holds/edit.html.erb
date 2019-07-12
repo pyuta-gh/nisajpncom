@@ -1,0 +1,17 @@
+<%- model_class = StockHold -%>
+
+  <% title =""
+     case @p_list
+       when  Settings.stock_holds_mode.hold_edit
+         title="保有銘柄 編集登録"
+       when  Settings.stock_holds_mode.hold_sell
+         title="保有銘柄 譲渡登録"
+       when  Settings.stock_holds_mode.profitloss_edit
+         title="譲渡銘柄 編集登録"
+       when  Settings.stock_holds_mode.profitloss_cancel
+         title="譲渡銘柄 譲渡取消"
+     end
+     %>
+     <h3><%= title %></h3>
+
+<%= render :partial => 'form' %>

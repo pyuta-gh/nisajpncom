@@ -1,0 +1,40 @@
+<%- model_class = Calender -%>
+
+  <h3><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h3>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:opt) %></th>
+      <th><%= model_class.human_attribute_name(:holliday) %></th>
+      <th><%= model_class.human_attribute_name(:description) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @calenders.each do |calender| %>
+      <tr>
+        <td><%= link_to calender.id, calender_path(calender) %></td>
+        <td><%= calender.opt %></td>
+        <td><%= calender.holliday %></td>
+        <td><%= calender.description %></td>
+        <td><%=l calender.created_at %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_calender_path(calender), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      calender_path(calender),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-default' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_calender_path,
+            :class => 'btn btn-default' %>

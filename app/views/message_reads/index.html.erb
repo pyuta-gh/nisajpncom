@@ -1,0 +1,55 @@
+<%- model_class = MessageRead -%>
+
+  <h3>お知らせ 既読・削除管理</h3>
+
+<% if @message_reads.records.count >0 then%>
+    <table class="table table-striped table-bordered table-condensed" style="table-layout:auto;">
+      <thead>
+      <tr>
+        <th class="text-center" width="80"><%= model_class.human_attribute_name(:message_id) %></th>
+        <th class="text-center" width="80"><%= model_class.human_attribute_name(:user_id) %></th>
+        <th class="text-center" width="80"><%= model_class.human_attribute_name(:read_flg) %></th>
+        <th class="text-center" width="80"><%= model_class.human_attribute_name(:delete_flg) %></th>
+        <th class="text-center" width="80"><%= model_class.human_attribute_name(:created_at) %></th>
+        <th class="text-center" width="80"><%= model_class.human_attribute_name(:updated_at) %></th>
+        <th class="text-center" width="80"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @message_reads.each do |message_read| %>
+          <tr>
+            <td class="text-right"><%= message_read.message_id %></td>
+            <td><%= message_read.user_id %></td>
+            <td class="text-center">
+              <%=format_bool(message_read.read_flg,"") %>
+            </td>
+            <td class="text-center">
+              <%=format_bool(message_read.delete_flg,"") %>
+            </td>
+            <td><%=l message_read.created_at %></td>
+            <td><%=l message_read.updated_at %></td>
+            <td>
+              <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                          edit_message_read_path(message_read), :class => 'btn btn-default btn-block' %>
+              <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                          message_read_path(message_read),
+                          :method => :delete,
+                          :data => { :confirm => "削除してよろしいですか？" ,cancel: "キャンセル",commit: "削除"}, title: "削除確認",
+                          :class => 'btn  btn-default btn-block' %>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <%= paginate @message_reads %><br>
+<% else%>
+    <p class="text-info">
+      お知らせ 既読・削除の情報はありません。<br><br>
+    </p>
+<% end %>
+
+
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_message_read_path,
+            :class => 'btn btn-default' %>

@@ -1,0 +1,33 @@
+<%= @inquiry.email %> さん
+ニーサジャパン.comからのお知らせです。
+
+登録したウオッチリストの条件に該当する値動がございましたので、お知らせします。
+
+■ 銘柄の値動きが、ウォッチリストの金額を上回ったもの
+<% @higher.each do |rec| %>
+  銘柄コード：<%=rec.stock_code %>
+  銘柄名：<%=rec.stock_name %>
+  ウォッチ金額：<%=rec.monitor_mny %>
+  終値：<%=rec.end_rate_mny %>
+  安値：<%=rec.min_rate_mny %>
+  高値：<%=rec.max_rate_mny %>
+------------------
+<%end %>
+
+■ 銘柄の値動きが、ウォッチリストの金額を下回ったもの
+<% @lower.each do |rec| %>
+    銘柄コード：<%=rec.stock_code %>
+    銘柄名：<%=rec.stock_name %>
+    ウォッチ金額：<%=rec.monitor_mny %>
+    終値：<%=rec.end_rate_mny %>
+    安値：<%=rec.min_rate_mny %>
+    高値：<%=rec.max_rate_mny %>
+    ------------------
+<%end %>
+
+メール配信停止を希望する場合、サイトにログインして、アカウント情報からメール配信を無効に設定ください。
+
+
+--------------------------------
+ニーサジャパン.com
+  https://nisa.jpn.com

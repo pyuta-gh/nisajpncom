@@ -1,0 +1,2 @@
+module StockMonitorsHelper
+end
